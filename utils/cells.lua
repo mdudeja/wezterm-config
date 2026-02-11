@@ -23,7 +23,7 @@
 
 ---@alias FormatItem.Reset 'ResetAttributes'
 
----@alias FormatItem FormatItem.Text|FormatItem.Attribute|FormatItem.Foreground|FormatItem.Background|FormatItem.Reset
+---@alias WZFormatItem FormatItem.Text|FormatItem.Attribute|FormatItem.Foreground|FormatItem.Background|FormatItem.Reset
 --[[ FormatItems: End ]]
 
 local attr = {}
@@ -48,7 +48,7 @@ end
 ---@alias Cells.SegmentColors {bg?: string|'UNSET', fg?: string|'UNSET'}
 
 ---@class FormatCells.Segment
----@field items FormatItem[]
+---@field items WZFormatItem[]
 ---@field has_bg boolean
 ---@field has_fg boolean
 
@@ -85,7 +85,7 @@ end
 function Cells:add_segment(segment_id, text, color, attributes)
    color = color or {}
 
-   ---@type FormatItem[]
+   ---@type WZFormatItem[]
    local items = {}
 
    if color.bg then
@@ -189,7 +189,7 @@ end
 ---Convert specific segments into a format that `wezterm.format` can use
 ---Segments will rendered in the order of the `ids` table
 ---@param ids table<string|number> the segment ids
----@return FormatItem[]
+---@return WZFormatItem[]
 function Cells:render(ids)
    local cells = {}
 
@@ -206,7 +206,7 @@ end
 ---Convert all segments into a format that `wezterm.format` can use
 --- WARNING: Segments may not be in the same order as they were added if the `segment_id` is a string
 ---
----@return FormatItem[]
+---@return WZFormatItem[]
 function Cells:render_all()
    local cells = {}
    for _, segment in pairs(self.segments) do
