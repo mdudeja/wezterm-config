@@ -60,7 +60,7 @@ local keys = {
    -- tabs --
    -- tabs: spawn+close
    { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
-   { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'wsl:ubuntu-fish' }) },
+   { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'wsl:arch-zsh' }) },
    { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
 
    -- tabs: navigation
@@ -82,9 +82,9 @@ local keys = {
 
    -- window: zoom window
    {
-      key = '-',
+      key = '=',
       mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          local dimensions = window:get_dimensions()
          if dimensions.is_full_screen then
             return
@@ -97,7 +97,7 @@ local keys = {
    {
       key = '=',
       mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          local dimensions = window:get_dimensions()
          if dimensions.is_full_screen then
             return
@@ -110,7 +110,7 @@ local keys = {
    {
       key = 'Enter',
       mods = mod.SUPER_REV,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          window:maximize()
       end)
    },
@@ -119,21 +119,21 @@ local keys = {
    {
       key = [[/]],
       mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          backdrops:random(window)
       end),
    },
    {
       key = [[,]],
       mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          backdrops:cycle_back(window)
       end),
    },
    {
       key = [[.]],
       mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          backdrops:cycle_forward(window)
       end),
    },
@@ -145,7 +145,7 @@ local keys = {
          choices = backdrops:choices(),
          fuzzy = true,
          fuzzy_description = 'Select Background: ',
-         action = wezterm.action_callback(function(window, _pane, idx)
+         action = wezterm.action_callback(function(window, _, idx)
             if not idx then
                return
             end
@@ -157,7 +157,7 @@ local keys = {
    {
       key = 'b',
       mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
+      action = wezterm.action_callback(function(window, _)
          backdrops:toggle_focus(window)
       end)
    },
@@ -165,13 +165,13 @@ local keys = {
    -- panes --
    -- panes: split panes
    {
-      key = [[\]],
+      key = [[|]],
       mods = mod.SUPER,
       action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
    },
    {
-      key = [[\]],
-      mods = mod.SUPER_REV,
+      key = [[-]],
+      mods = mod.SUPER,
       action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
    },
 

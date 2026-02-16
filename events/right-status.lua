@@ -1,3 +1,4 @@
+---@type Wezterm
 local wezterm = require('wezterm')
 local umath = require('utils.math')
 local Cells = require('utils.cells')
@@ -25,8 +26,9 @@ local M = {}
 
 local ICON_SEPARATOR = nf.oct_dash
 local ICON_DATE = nf.fa_calendar
+local ICON_TABLE = nf.md_table --[[ '󱏅' ]]
 
----@type string[]
+---@type string
 local discharging_icons = {
    nf.md_battery_10,
    nf.md_battery_20,
@@ -58,7 +60,9 @@ local charging_icons = {
 local colors = {
    date      = { fg = '#fab387', bg = 'rgba(0, 0, 0, 0.4)' },
    battery   = { fg = '#f9e2af', bg = 'rgba(0, 0, 0, 0.4)' },
-   separator = { fg = '#74c7ec', bg = 'rgba(0, 0, 0, 0.4)' }
+   separator = { fg = '#74c7ec', bg = 'rgba(0, 0, 0, 0.4)' },
+   separator2 = { fg = '#eb6f92', bg = 'rgba(0, 0, 0, 0.4)' },
+   table = { fg = '#eb6f92', bg = 'rgba(0, 0, 0, 0.4)' },
 }
 
 local cells = Cells:new()
@@ -71,13 +75,15 @@ cells
    :add_segment('battery_text', '', colors.battery, attr(attr.intensity('Bold')))
 
 ---@return string, string
-local function battery_info()
+local function get_battery_info()
    -- ref: https://wezfurlong.org/wezterm/config/lua/wezterm/battery_info.html
 
    local charge = ''
    local icon = ''
 
-   for _, b in ipairs(wezterm.battery_info()) do
+   local bi = wezterm.battery_info()
+
+   for _, b in ipairs(bi) do
       local idx = umath.clamp(umath.round(b.state_of_charge * 10), 1, 10)
       charge = string.format('%.0f%%', b.state_of_charge * 100)
 
@@ -100,18 +106,42 @@ M.setup = function(opts)
    end
 
    wezterm.on('update-right-status', function(window, _pane)
-      local battery_text, battery_icon = battery_info()
+      local battery_text, battery_icon = get_battery_info()
+
+      local to_render = {
+         'date_icon',
+         'date_text',
+         'separator',
+         'battery_icon',
+         'battery_text',
+      }
+
+      local name = window:active_key_table()
+
+      if name then
+         cells
+            :add_segment('separator2', ' ' .. ICON_SEPARATOR .. '  ', colors.separator)
+            :add_segment('table_icon', ICON_TABLE .. '  ', colors.separator)
+            :add_segment('table_text', name, colors.separator, attr(attr.intensity('Bold')))
+
+         to_render = {
+            'date_icon',
+            'date_text',
+            'separator',
+            'battery_icon',
+            'battery_text',
+            'separator2',
+            'table_icon',
+            'table_text',
+         }
+      end
 
       cells
          :update_segment_text('date_text', wezterm.strftime(valid_opts.date_format))
          :update_segment_text('battery_icon', battery_icon)
          :update_segment_text('battery_text', battery_text)
 
-      window:set_right_status(
-         wezterm.format(
-            cells:render({ 'date_icon', 'date_text', 'separator', 'battery_icon', 'battery_text' })
-         )
-      )
+      window:set_right_status(wezterm.format(cells:render(to_render)))
    end)
 end
 

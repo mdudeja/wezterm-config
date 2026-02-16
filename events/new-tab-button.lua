@@ -104,7 +104,7 @@ M.setup = function()
                choices = choices,
                fuzzy = true,
                fuzzy_description = nf.md_rocket .. ' Select a lauch item: ',
-               action = wezterm.action_callback(function(_window, _pane, id, label)
+               action = wezterm.action_callback(function(_, _, id, label)
                   if not id and not label then
                      return
                   else

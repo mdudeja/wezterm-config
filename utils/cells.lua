@@ -191,6 +191,10 @@ end
 ---@param ids table<string|number> the segment ids
 ---@return WZFormatItem[]
 function Cells:render(ids)
+   if not ids or #ids == 0 then
+      return {}
+   end
+
    local cells = {}
 
    for _, id in ipairs(ids) do
