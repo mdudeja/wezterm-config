@@ -226,4 +226,14 @@ function BackDrops:toggle_focus(window)
    self:_set_opt(window, background_opts)
 end
 
+function BackDrops:clear(window)
+   local overrides = window:get_config_overrides() or {}
+
+   if overrides.background then
+      overrides.background = {}
+   end
+
+   window:set_config_overrides(overrides)
+end
+
 return BackDrops:init()

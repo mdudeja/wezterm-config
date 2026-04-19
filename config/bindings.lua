@@ -161,6 +161,13 @@ local keys = {
          backdrops:toggle_focus(window)
       end)
    },
+   {
+     key = [[,]],
+     mods = mod.SUPER_REV,
+     action = wezterm.action_callback(function(window, _)
+        backdrops:clear(window)
+      end),
+   },
 
    -- panes --
    -- panes: split panes
