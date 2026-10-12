@@ -274,4 +274,5 @@ return {
   keys = keys,
   key_tables = key_tables,
   mouse_bindings = mouse_bindings,
+  options = {}
 }
